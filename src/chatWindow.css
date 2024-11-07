@@ -1,0 +1,60 @@
+.chat-window {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    flex-grow: 1; /* Take up remaining space */
+    overflow: hidden; /* Prevent overflow */
+  }
+  
+  .messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  z-index: 1;
+  }
+  
+  .AIMessage {
+  padding: 8px;
+  border-radius: 4px;
+  margin: 5px 0;
+  background-color: #e1ffc7;
+  }
+  
+.userMessage {
+  padding: 8px;
+  border-radius: 4px;
+  margin: 5px 0;
+  background-color: #26e787;
+}
+
+.input-area {
+  display: flex; /* Use flex for alignment */
+  padding: 10px; /* Padding for the input area */
+  height: 56px;
+  border-top: 1px solid #ccc; /* Optional border on top */
+  margin-bottom: 20px;
+  background-color: #fff; /* Background for input area */
+}
+  
+.input-area input {
+  flex: 1; /* Allow input to grow */
+  padding: 10px; /* Padding for input */
+  border: 1px solid #ccc; /* Border for the input */
+  border-radius: 4px; /* Rounded corners */
+}
+  
+  /* Styles for the button containing the image */
+.send-button {
+  background: none; /* No background */
+  border: none; /* No border */
+  cursor: pointer; /* Pointer on hover */
+  padding: 0; /* Remove padding */
+  margin-left: 10px; /* Space between input and button */
+  margin-right: 60px; /* Space between button and screen end*/
+}
+
+/* Ensure the image fits well */
+.send-button img {
+  width: 30px; /* Set the desired width */
+  height: 30px; /* Set the desired height */
+  display: block; /* Prevent any extra spacing */
+}
