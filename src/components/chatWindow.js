@@ -1,5 +1,5 @@
 import React from "react";
-import SendIcon from './send.png'
+import SendIcon from './../send.png'
 
 export default function ChatWindow({messages, input, setInput, handleSend}){
     return (
