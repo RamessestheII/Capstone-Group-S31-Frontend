@@ -1,14 +1,14 @@
 import React from "react";
 import SendIcon from './../send.png'
+import Messages from "./messages";
 
-export default function ChatWindow({messages, input, setInput, handleSend}){
+export default function ChatWindow({messages, input, setInput, handleSend, deleteMessage}){
     return (
         <div className="chat-window">
-            <div className="messages">
-                {messages.map((msg, index) => (
-                    <div key={index} className={index%2 === 0 ? "AIMessage":"userMessage"}>{msg}</div>
-                ))}
-            </div>
+            <Messages
+                messages={messages}
+                deleteMessage={deleteMessage}
+            />
             <div className="input-area">
                 <input
                     type="text"
