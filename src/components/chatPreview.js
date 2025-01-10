@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function ChatPreview({chatTitle, lastMessage, timeStamp}){
+export default function ChatPreview({title, lastMessage, timeStamp}){
     return (
         <div style={{
             display: 'flex',         // Use flexbox for layout
@@ -14,7 +14,7 @@ export default function ChatPreview({chatTitle, lastMessage, timeStamp}){
                 flexDirection: 'column' // Stack items vertically
             }}>
                 
-                <p style={{ margin: 0, paddingBottom: '5px', fontSize: 20 }}>{chatTitle}</p>
+                <p style={{ margin: 0, paddingBottom: '5px', fontSize: 20 }}>{title}</p>
                 <p style={{ margin: 0, paddingBottom: '5px' }}>{lastMessage}</p>
             </div>
             <p style={{ marginLeft: 'auto' }}>{timeStamp}</p> {/* Push timeStamp to the right */}

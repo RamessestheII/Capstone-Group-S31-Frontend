@@ -26,7 +26,6 @@ const Login = () => {
 
     if (response.ok) {
       const data = await response.json();
-      console.log(data)
       await login(data.userId, data.token);
       setRedirect(true); // Set redirect to true on successful login
     } else {

@@ -7,9 +7,12 @@ import HamburgerMenu from "./../hamburger.png";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 
 export default function Home() {
+    const [allMessages, setAllMessages] = useState(null);
     const [messages, setMessages] = useState([]);
+    const [chatPreviews, setChatPreviews] = useState([]);
+    const [chatNo, setChatNo] = useState(null);
     const [input, setInput] = useState("");
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(true);
     const authHeader = useAuthHeader();
     const headers = {
         Authorization: authHeader,
@@ -27,13 +30,17 @@ export default function Home() {
         const fetchData = async () => {
             try {
                 const chatResponse = await axios.get(
-                    `${chatbackend}/message/1`,
+                    `${chatbackend}/message`,
                     {
                         headers: headers,
                     }
                 );
                 if (chatResponse && chatResponse.data) {
-                    setMessages([...chatResponse.data]);
+                    setAllMessages(chatResponse.data.messagesDict);
+                    let previewList = chatResponse.data.chatPreviews;
+                    // sort chat list by recency of timestamps
+                    previewList.sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp));
+                    setChatPreviews(previewList);
                 } else {
                     console.error("No data received");
                 }
@@ -44,11 +51,66 @@ export default function Home() {
         fetchData();
     }, []);
 
+    // Change displayed chat in window to chat of given id
+    const handleChatChange = (id) => {
+        setChatNo(id)
+        setMessages(allMessages[id.toString()].messages);
+    }
+
+    const addChat = async () => {
+        try {
+            const chat = await axios.post(
+                `${chatbackend}/chat/`,
+                {title: 'title3'},
+                {headers}
+            );
+
+            // add received message object to messages
+            if (chat && chat.data) {
+                setAllMessages(prevMessages => {
+                    prevMessages[chat.data.id] = {
+                        messages: [],
+                        title: 'title3'
+                    }
+                    return prevMessages
+                });
+                setChatPreviews(oldPreviews=>[{
+                    id: chat.data.id,
+                    title: 'title3'
+                }, ...oldPreviews])
+            } else {
+                console.error("No data received");
+            }
+        } catch (error) {
+            console.error("Error sending message:", error);
+        }
+    };
+
+    // delete selected chat
+    const deleteChat = async (id) => {
+        await axios.delete(
+            `${chatbackend}/chat/${id}`,
+            {
+                headers: headers,
+            }
+        )
+        // clear chat window if current chat is being deleted
+        if (chatNo===id){
+            setChatNo(null);
+            setMessages([])
+        }
+        setAllMessages(prevMessages=> {
+            delete prevMessages.id
+            return prevMessages
+        });
+        setChatPreviews(chatPreviews.filter((chat) => chat.id !== id));
+    };
+
     // add new message to database and messages
     const addMessage = async (newMessage, type) => {
         try {
             const message = await axios.post(
-                `${chatbackend}/message/1`,
+                `${chatbackend}/message/${chatNo}`,
                 {
                     content: newMessage,
                     ai: type
@@ -58,7 +120,15 @@ export default function Home() {
 
             // add received message object to messages
             if (message && message.data) {
+                // update messages for chat
                 setMessages(messages => [...messages, message.data]);
+                // update timestamp and lastMessage in chats column
+                setChatPreviews( oldPreviews => oldPreviews.map(preview =>
+                    preview.id === message.data.chatId
+                      ? { ...preview, lastMessage: newMessage, timeStamp: message.data.timestamp }
+                      : preview
+                  ).sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp))
+                )
             } else {
                 console.error("No data received");
             }
@@ -104,19 +174,18 @@ export default function Home() {
         setMessages(messages.filter((message) => message.id !== id)); // Filter out the deleted message
     };
 
-    const chatList = [
-        {chatTitle: "Title A", lastMessage: "a", timeStamp: "12"},
-        {chatTitle: "Title B", lastMessage: "a", timeStamp: "12"},
-        {chatTitle: "Title C", lastMessage: "a", timeStamp: "12"},
-    ];
-
     return (
         <div className="chat-app">
             <button onClick={toggleMenu} className="hamburgerbutton">
                 <img src={HamburgerMenu} alt="menu icon" />
             </button>
             <div className={`SlidingMenuVisible ${isMenuOpen ? "open" : ""}`}>
-                <ChatsColumn chatList={chatList} />
+                <ChatsColumn 
+                chatPreviews={chatPreviews} 
+                handleChatChange={handleChatChange}
+                addChat={addChat}
+                onDeleteChat={deleteChat}
+                />
             </div>
             <div className="chat-app1">
                 <Navbar />
