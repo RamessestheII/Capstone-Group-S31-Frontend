@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 
-const UserInputDialog = ({ isOpen, onClose, onSubmit }) => {
+const TitleModal = ({ isOpen, onClose, onSubmit }) => {
   const [inputValue, setInputValue] = useState("");
 
   const handleSubmit = () => {
     onSubmit(inputValue);
+    setInputValue("")
     onClose();
   };
 
@@ -23,4 +24,4 @@ const UserInputDialog = ({ isOpen, onClose, onSubmit }) => {
   );
 };
 
-export default UserInputDialog;
+export default TitleModal;

@@ -57,11 +57,11 @@ export default function Home() {
         setMessages(allMessages[id.toString()].messages);
     }
 
-    const addChat = async () => {
+    const addChat = async (title) => {
         try {
             const chat = await axios.post(
                 `${chatbackend}/chat/`,
-                {title: 'title3'},
+                {title},
                 {headers}
             );
 
@@ -70,13 +70,13 @@ export default function Home() {
                 setAllMessages(prevMessages => {
                     prevMessages[chat.data.id] = {
                         messages: [],
-                        title: 'title3'
+                        title: title
                     }
                     return prevMessages
                 });
                 setChatPreviews(oldPreviews=>[{
                     id: chat.data.id,
-                    title: 'title3'
+                    title: title
                 }, ...oldPreviews])
             } else {
                 console.error("No data received");

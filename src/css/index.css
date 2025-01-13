@@ -2,6 +2,7 @@
 @import "chatWindow.css";
 @import "Login.css";
 @import "Navbar.css";
+@import "titleModal.css";
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
