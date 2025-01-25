@@ -46,18 +46,18 @@ export default function ChatsColumn({ chatPreviews, handleChatChange, addChat, o
     };
 
     return (
-        <div style={{ marginTop: '48px' }}>
+        <div className="m-8">
             <div style={{ padding: 10, display: 'flex'}}>
                 <TitleModal
                     isOpen={isDialogOpen}
                     onClose={() => setIsDialogOpen(false)}
                     onSubmit={addChat}
                 />
-                <button className="chatbuttons" onClick={() => setIsDialogOpen(true)}>
+                <button className="flex bg-white m-4 py-4 px-6" onClick={() => setIsDialogOpen(true)}>
                     <img src={AddIcon} alt="add" style={{ height: 24 }} />
                     <p className="newchattext">New Chat</p>
                 </button>
-                <button className="chatbuttons" onClick={() => setFileShown(prev=>!prev)}>
+                <button className="flex bg-white m-4 py-4 px-6" onClick={() => setFileShown(prev=>!prev)}>
                     <img src={Upload} alt="add" style={{ height: 24 }} />
                     <p className="newchattext">Add Files</p>
                 </button>

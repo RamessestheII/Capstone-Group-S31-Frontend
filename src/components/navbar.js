@@ -3,10 +3,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ProfilePicture from './../profile.png'
 import STLogo from './../logo.png'
+import HamburgerMenu from './../hamburger.png'
 import { useAuth } from '../Auth';
 
 
-const Navbar = () => {
+const Navbar = ({isMenuOpen, toggleMenu}) => {
   const {logout} = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const overlayRef = useRef(null); // Create a ref for the overlay
@@ -38,20 +39,31 @@ const Navbar = () => {
   }, [isOpen]);
 
   return (
-    <nav className="navbar">
-      <div style={{display: 'flex', alignItems: 'center'}}>
-        <img src={STLogo} alt='steng-logo' style={{width: '140px', marginLeft: '20px'}}/>
-        <p className='logotext'>ChatBot</p>
+    <nav className="flex justify-between items-center bg-white border-2 border-gray-500">
+      <div className='flex'>
+        {
+            isMenuOpen? (<></>):
+            (
+              <button onClick={toggleMenu} className='absolute bg-transparent border-none cursor-pointer mt-3 p-0 z-2'>
+                <img src={HamburgerMenu} alt="menu icon" className='w-12 h-12 pl-2 pt-2 block'/>
+              </button>
+            )
+        }
+        <div className='flex align-middle'>
+          <img src={STLogo} alt='steng-logo' className='w-36 ml-12'/>
+          <p className='mt-7 ml-3 font-sans font-bold text-20 text-gray-700'>ChatBot</p>
+        </div>
+        
       </div>
       
-      <div className="navbar-brand">
-        <button onClick={toggleOverlay} className="navbar-button">
-          <img src={ProfilePicture} alt='profile' style={{width: '40px'}}/>
-          <p style={{marginLeft: '10px'}}>User</p>
+      <div className="flex items-center text-white text-lg font-bold relative mr-10">
+        <button onClick={toggleOverlay} className="bg-white text-gray-500 border-none px-4 py-2 cursor-pointer text-base flex items-center">
+          <img src={ProfilePicture} alt='profile' className='w-10'/>
+          <p className='ml-2'>User</p>
         </button>
         {isOpen && (
-          <div className="overlay" ref={overlayRef}>
-            <ul className="overlay-links">
+          <div className="absolute top-full left-0 bg-white bg-opacity-90 p-4 rounded-lg shadow-lg z-10" ref={overlayRef}>
+            <ul className="list-none p-0 m-0 text-black">
               <li><a href="/">Home</a></li>
               <li><a href="/">Settings</a></li>
               <li onClick={()=>logout()}><a href="/login">Log Out</a></li>

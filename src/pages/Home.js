@@ -175,20 +175,26 @@ export default function Home() {
     };
 
     return (
-        <div className="chat-app">
-            <button onClick={toggleMenu} className="hamburgerbutton">
-                <img src={HamburgerMenu} alt="menu icon" />
-            </button>
-            <div className={`SlidingMenuVisible ${isMenuOpen ? "open" : ""}`}>
+        <div className="min-h-screen m-0 flex bg-slate-50 dark:bg-black dark:text-white overflow-y-hidden">
+            {isMenuOpen ? (
+                <button onClick={toggleMenu} className="absolute bg-transparent border-none cursor-pointer mt-3 p-0 z-10">
+                    <img src={HamburgerMenu} alt="menu icon" className="w-12 h-12 pl-2 pt-2 block" />
+                </button>
+            ) : null}
+
+            <div className={`fixed top-0 left-0 h-full transition-transform ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} w-80`}>
                 <ChatsColumn 
-                chatPreviews={chatPreviews} 
-                handleChatChange={handleChatChange}
-                addChat={addChat}
-                onDeleteChat={deleteChat}
+                    chatPreviews={chatPreviews} 
+                    handleChatChange={handleChatChange}
+                    addChat={addChat}
+                    onDeleteChat={deleteChat}
                 />
             </div>
-            <div className="chat-app1">
-                <Navbar />
+            <div className={`flex flex-1 flex-col h-screen border border-gray-300 bg-gray-200 transition-margin-left ${isMenuOpen ? 'ml-80' : 'ml-0'}`}>
+                <Navbar 
+                    isMenuOpen={isMenuOpen}
+                    toggleMenu={toggleMenu}
+                />
                 <ChatWindow
                     messages={messages}
                     input={input}

@@ -1,19 +1,4 @@
-.chat-window {
-    display: flex;
-    flex-direction: column; /* Stack children vertically */
-    flex-grow: 1; /* Take up remaining space */
-    overflow: hidden; /* Prevent overflow */
-  }
-  
-  .messages {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow-y: auto;
-  margin-bottom: 10px;
-  z-index: 1;
-  }
-  
+
   .AIMessage {
   padding: 8px;
   border-radius: 4px;
@@ -34,22 +19,6 @@
   align-self: flex-end;
   width: fit-content;
   height: fit-content;
-}
-
-.input-area {
-  display: flex; /* Use flex for alignment */
-  padding: 10px; /* Padding for the input area */
-  height: 56px;
-  border-top: 1px solid #ccc; /* Optional border on top */
-  margin-bottom: 20px;
-  background-color: #fff; /* Background for input area */
-}
-  
-.input-area input {
-  flex: 1; /* Allow input to grow */
-  padding: 10px; /* Padding for input */
-  border: 1px solid #ccc; /* Border for the input */
-  border-radius: 4px; /* Rounded corners */
 }
   
   /* Styles for the button containing the image */
@@ -82,15 +51,12 @@
     /* or 150% */
     text-align: center;
     letter-spacing: 0.15px;
-    margin-left: 10px;
     
     color: #000000;
     
   }
   
-  
-  
-  /* Rectangle 9 */
+
   .chatbuttons {
     display: flex;
     background-color: white;

@@ -1,41 +1,12 @@
 @import "App.css";
 @import "chatWindow.css";
 @import "Login.css";
-@import "Navbar.css";
 @import "titleModal.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-  sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  height:100vh;
-  width: 100vw;
-  overflow: hidden;
-  margin: 0;
-  }
-  .chat-app {
-    display: flex; /* Enable flexbox for row layout */
-    height: 100vh;
-    background-color: #f9f9f9;
-    overflow: hidden;
-  }
-
-  /* SlidingMenu */
-  .SlidingMenuVisible {
-    width: 350px; /* Set a width for the sliding menu */
-    height: 100vh; /* Full height */
-    background-color: #f0f0f0; /* Background color */
-    position: relative; /* Required for absolute positioning */
-    transform: translateX(-100%); /* Initially hide the menu off-screen */
-    transition: transform 0.3s ease; /* Smooth transition */
-  }
-  
-  .SlidingMenuVisible.open {
-    transform: translateX(0); /* Slide in when open */
-  }
-  .chat-app1 {
+.chat-app1 {
     flex: 3; /* Allow it to grow and fill available space */
     display: flex; /* Enable flexbox for column layout */
     flex-direction: column; /* Arrange children in a column */
@@ -47,24 +18,7 @@ body {
     transition: flex-basis 0.3s ease; /* Smooth transition when resizing */
   }
 
-.hamburgerbutton{
-  position: absolute;
-  background: none; /* No background */
-  border: none; /* No border */
-  cursor: pointer; /* Pointer on hover */
-  padding: 0; /* Remove padding */
-  z-index: 2;
-}
-
-.hamburgerbutton img {
-  width: 48px;
-  height: 48px;
-  padding-left: 10px;
-  padding-top: 10px;
-  display: block;
-}
-
-
+  /* flex flex-col flex-1 transition-margin-left ${isMenuOpen ? 'ml-80' : 'ml-0'} */
 
 
 
