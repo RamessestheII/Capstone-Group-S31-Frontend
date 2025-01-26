@@ -39,16 +39,16 @@ const Navbar = ({isMenuOpen, toggleMenu}) => {
   }, [isOpen]);
 
   return (
-    <nav className="flex justify-between items-center bg-white border-2 border-gray-500">
+    <nav className="flex justify-between items-center h-[10%] bg-white">
       <div className='flex'>
-        {
+        {/* {
             isMenuOpen? (<></>):
             (
               <button onClick={toggleMenu} className='absolute bg-transparent border-none cursor-pointer mt-3 p-0 z-2'>
                 <img src={HamburgerMenu} alt="menu icon" className='w-12 h-12 pl-2 pt-2 block'/>
               </button>
             )
-        }
+        } */}
         <div className='flex align-middle'>
           <img src={STLogo} alt='steng-logo' className='w-36 ml-12'/>
           <p className='mt-7 ml-3 font-sans font-bold text-20 text-gray-700'>ChatBot</p>

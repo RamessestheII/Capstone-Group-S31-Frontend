@@ -4,19 +4,19 @@ import Messages from "./messages";
 
 export default function ChatWindow({messages, input, setInput, handleSend, deleteMessage}){
     return (
-        <div className="flex flex-col flex-grow overflow-hidden">
+        <div className="flex flex-col h-[90%] relative">
           <Messages messages={messages} deleteMessage={deleteMessage} />
-          <div className="flex items-center px-4 h-14 border-t border-gray-300 mb-5 bg-white">
+          <div className="flex px-4 h-14 items-center justify-center">
             <input
-                className="flex-1 h-full px-4 border border-gray-300 rounded"
+                className="h-full w-[60%] px-4 border border-gray-300 rounded-lg"
                 type="text"
                 value={input}
                 onKeyUp={(e) => { if (e.key === 'Enter') handleSend() }}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Type a message..."
             />
-            <button onClick={handleSend} className="bg-transparent border-none cursor-pointer p-0 ml-10 mr-60">
-              <img src={SendIcon} alt="send icon" className="w-7 h-7 block"/>
+            <button onClick={handleSend} className="bg-transparent h-full border-none cursor-pointer ml-4">
+              <img src={SendIcon} alt="send icon" className=" flex-1 h-[70%] block"/>
             </button>
           </div>
         </div>

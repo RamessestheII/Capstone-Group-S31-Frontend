@@ -3,10 +3,9 @@
   padding: 8px;
   border-radius: 4px;
   margin: 5px 0;
-  margin-left: 20px;
+  margin-left: 16.5%;
   background-color: #e1ffc7;
   align-self: flex-start;
-  width: fit-content;
   height: fit-content;
   }
   
@@ -14,10 +13,9 @@
   padding: 8px;
   border-radius: 4px;
   margin: 5px 0;
-  margin-right: 50px;
+  margin-right: 16.5%;
   background-color: #26e787;
   align-self: flex-end;
-  width: fit-content;
   height: fit-content;
 }
   

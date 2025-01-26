@@ -175,14 +175,13 @@ export default function Home() {
     };
 
     return (
-        <div className="min-h-screen m-0 flex bg-slate-50 dark:bg-black dark:text-white overflow-y-hidden">
-            {isMenuOpen ? (
-                <button onClick={toggleMenu} className="absolute bg-transparent border-none cursor-pointer mt-3 p-0 z-10">
-                    <img src={HamburgerMenu} alt="menu icon" className="w-12 h-12 pl-2 pt-2 block" />
-                </button>
-            ) : null}
+        <div className="h-screen m-0 flex bg-slate-200 dark:bg-black dark:text-white ">
+            
+            <button onClick={toggleMenu} className="absolute bg-transparent border-none cursor-pointer mt-3 p-0 z-10">
+                <img src={HamburgerMenu} alt="menu icon" className="w-12 h-12 pl-2 pt-2 block" />
+            </button>
 
-            <div className={`fixed top-0 left-0 h-full transition-transform ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} w-80`}>
+            <div className={`h-full fixed top-0 left-0  transition-transform ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} w-80`}>
                 <ChatsColumn 
                     chatPreviews={chatPreviews} 
                     handleChatChange={handleChatChange}
@@ -190,7 +189,7 @@ export default function Home() {
                     onDeleteChat={deleteChat}
                 />
             </div>
-            <div className={`flex flex-1 flex-col h-screen border border-gray-300 bg-gray-200 transition-margin-left ${isMenuOpen ? 'ml-80' : 'ml-0'}`}>
+            <div className={`flex flex-col w-full h-full overflow-hidden transition-margin-left ${isMenuOpen ? 'ml-80' : 'ml-0'}`}>
                 <Navbar 
                     isMenuOpen={isMenuOpen}
                     toggleMenu={toggleMenu}

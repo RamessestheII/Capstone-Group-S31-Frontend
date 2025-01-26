@@ -46,8 +46,8 @@ export default function ChatsColumn({ chatPreviews, handleChatChange, addChat, o
     };
 
     return (
-        <div className="m-8">
-            <div style={{ padding: 10, display: 'flex'}}>
+        <div className="h-full mt-12 flex flex-col">
+            <div className="flex p-3">
                 <TitleModal
                     isOpen={isDialogOpen}
                     onClose={() => setIsDialogOpen(false)}
@@ -63,6 +63,7 @@ export default function ChatsColumn({ chatPreviews, handleChatChange, addChat, o
                 </button>
             </div>
             
+            <div className="flex flex-col h-full overflow-hidden hover:overflow-y-auto ">
             {fileShown ? (
                    <>
                    <FileUpload setFileList={setFileList}/>
@@ -72,8 +73,10 @@ export default function ChatsColumn({ chatPreviews, handleChatChange, addChat, o
                </>
                ) : 
                 (chatPreviews.map((msg, index) => (
-                    <button onClick={async()=>{handleChatChange(msg.id)}} key={index} 
-                    onContextMenu={(e)=>handleContextMenu(e,msg.id)}>
+                    <button 
+                        onClick={async()=>{handleChatChange(msg.id)}} key={index} 
+                        onContextMenu={(e)=>handleContextMenu(e,msg.id)}
+                    >
                         <ChatPreview 
                             title={msg.title}
                             lastMessage={msg.lastMessage}
@@ -82,7 +85,7 @@ export default function ChatsColumn({ chatPreviews, handleChatChange, addChat, o
                     </button>
                 )))
                }
-            
+            </div>
             
         </div>
     );

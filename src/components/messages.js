@@ -10,7 +10,7 @@ export default function Messages({messages, deleteMessage}){
     }, [messages]);
 
 return (
-    <div className="flex flex-col flex-grow overflow-y-auto h-full">
+    <div className="flex flex-col overflow-y-auto h-full">
         {messages.map((message) => (
         <MessageBox key={message.id} message={message} onDelete={deleteMessage} />
         ))}
