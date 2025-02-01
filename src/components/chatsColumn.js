@@ -21,11 +21,12 @@ export default function ChatsColumn({ chatPreviews, handleChatChange, addChat, o
         const fetchData = async () => {
             try {
                 const fileList = await axios.get(
-                    'http://localhost:3001/file',
+                    'http://localhost:3001/upload/',
                     {
                         headers: {'Authorization':authHeader},
                     }
                 );
+
                 if (fileList && fileList.data) {
                     setFileList(fileList.data)
                 } else {
@@ -72,15 +73,15 @@ export default function ChatsColumn({ chatPreviews, handleChatChange, addChat, o
                    ))}
                </>
                ) : 
-                (chatPreviews.map((msg, index) => (
+                (chatPreviews.map((chat, index) => (
                     <button 
-                        onClick={async()=>{handleChatChange(msg.id)}} key={index} 
-                        onContextMenu={(e)=>handleContextMenu(e,msg.id)}
+                        onClick={async()=>{handleChatChange(chat.id)}} key={index} 
+                        onContextMenu={(e)=>handleContextMenu(e,chat.id)}
                     >
                         <ChatPreview 
-                            title={msg.title}
-                            lastMessage={msg.lastMessage}
-                            timeStamp={msg.timeStamp}
+                            title={chat.title}
+                            lastMessage={chat.lastMessage}
+                            timeStamp={chat.timeStamp}
                         />
                     </button>
                 )))

@@ -14,6 +14,7 @@ export default function Home() {
     const [input, setInput] = useState("");
     const [isMenuOpen, setIsMenuOpen] = useState(true);
     const authHeader = useAuthHeader();
+
     const headers = {
         Authorization: authHeader,
     };
@@ -30,7 +31,7 @@ export default function Home() {
         const fetchData = async () => {
             try {
                 const chatResponse = await axios.get(
-                    `${chatbackend}/message`,
+                    `${chatbackend}/message/`,
                     {
                         headers: headers,
                     }
@@ -38,6 +39,7 @@ export default function Home() {
                 if (chatResponse && chatResponse.data) {
                     setAllMessages(chatResponse.data.messagesDict);
                     let previewList = chatResponse.data.chatPreviews;
+
                     // sort chat list by recency of timestamps
                     previewList.sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp));
                     setChatPreviews(previewList);
@@ -54,7 +56,8 @@ export default function Home() {
     // Change displayed chat in window to chat of given id
     const handleChatChange = (id) => {
         setChatNo(id)
-        setMessages(allMessages[id.toString()].messages);
+        console.log(chatNo, typeof chatNo)
+        setMessages(allMessages[id].messages);
     }
 
     const addChat = async (title) => {
@@ -109,6 +112,8 @@ export default function Home() {
     // add new message to database and messages
     const addMessage = async (newMessage, type) => {
         try {
+            setInput(""); // clear user input
+
             const message = await axios.post(
                 `${chatbackend}/message/${chatNo}`,
                 {
@@ -121,10 +126,11 @@ export default function Home() {
             // add received message object to messages
             if (message && message.data) {
                 // update messages for chat
+                console.log(message.data)
                 setMessages(messages => [...messages, message.data]);
                 // update timestamp and lastMessage in chats column
                 setChatPreviews( oldPreviews => oldPreviews.map(preview =>
-                    preview.id === message.data.chatId
+                    preview.id === message.data.chat_id
                       ? { ...preview, lastMessage: newMessage, timeStamp: message.data.timestamp }
                       : preview
                   ).sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp))
@@ -141,9 +147,7 @@ export default function Home() {
     const handleSend = async () => {
         if (input) {
             await addMessage(input, false);
-
             await getChatReply(input);
-            setInput(""); // clear user input
         }
     };
 

@@ -18,7 +18,7 @@ export default function FileUpload({setFileList}) {
         formData.append('pdf', file);
         
         try {
-            const response = await axios.post('http://localhost:3001/file/scan', formData, {
+            const response = await axios.post('http://localhost:3001/upload/scan', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': authHeader
