@@ -3,11 +3,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ProfilePicture from './../profile.png'
 import STLogo from './../logo.png'
-import HamburgerMenu from './../hamburger.png'
 import { useAuth } from '../Auth';
 
 
-const Navbar = ({isMenuOpen, toggleMenu}) => {
+const Navbar = () => {
   const {logout} = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const overlayRef = useRef(null); // Create a ref for the overlay
@@ -41,14 +40,6 @@ const Navbar = ({isMenuOpen, toggleMenu}) => {
   return (
     <nav className="flex justify-between items-center h-[10%] bg-white">
       <div className='flex'>
-        {/* {
-            isMenuOpen? (<></>):
-            (
-              <button onClick={toggleMenu} className='absolute bg-transparent border-none cursor-pointer mt-3 p-0 z-2'>
-                <img src={HamburgerMenu} alt="menu icon" className='w-12 h-12 pl-2 pt-2 block'/>
-              </button>
-            )
-        } */}
         <div className='flex align-middle'>
           <img src={STLogo} alt='steng-logo' className='w-36 ml-12'/>
           <p className='mt-7 ml-3 font-sans font-bold text-20 text-gray-700'>ChatBot</p>

@@ -15,18 +15,20 @@ export default function ChatsColumn({ chatPreviews, handleChatChange, addChat, o
 
     // auth header to authenticate user backend requests
     const authHeader = useAuthHeader();
+    const backend = process.env.REACT_APP_BACKEND_URL
+
+    const headers = {
+        Authorization: authHeader,
+    };
 
      // get file list on startup
      useEffect(() => {
         const fetchData = async () => {
             try {
                 const fileList = await axios.get(
-                    'http://localhost:3001/upload/',
-                    {
-                        headers: {'Authorization':authHeader},
-                    }
+                    `${backend}/upload/`,
+                    {headers}
                 );
-
                 if (fileList && fileList.data) {
                     setFileList(fileList.data)
                 } else {
@@ -39,12 +41,24 @@ export default function ChatsColumn({ chatPreviews, handleChatChange, addChat, o
         fetchData();
     }, []);
 
-    const handleContextMenu = (e, id) => {
+    const handleContextMenuChat = (e, id) => {
         e.preventDefault(); // Prevent the default context menu from appearing
         if (window.confirm('Do you want to delete this chat?')) {
             onDeleteChat(id); // Call the onDeleteChat function with the chat ID
         }
     };
+
+    const handleContextMenuFile = async(e, filename) => {
+        e.preventDefault(); // Prevent the default context menu from appearing
+        if (window.confirm('Do you want to delete this file?')) {
+            
+            await axios.delete(
+                `${backend}/upload/${filename}`,
+                {headers}
+            )
+            setFileList(fileList.filter((file) => file !== filename));
+        }
+    }
 
     return (
         <div className="h-full mt-12 flex flex-col">
@@ -69,14 +83,14 @@ export default function ChatsColumn({ chatPreviews, handleChatChange, addChat, o
                    <>
                    <FileUpload setFileList={setFileList}/>
                    {fileList.map((file, index) => (
-                       <div key={index}>{file}</div>
+                       <div key={index} onContextMenu={(e)=>handleContextMenuFile(e, file)}>{file}</div>
                    ))}
                </>
                ) : 
                 (chatPreviews.map((chat, index) => (
                     <button 
                         onClick={async()=>{handleChatChange(chat.id)}} key={index} 
-                        onContextMenu={(e)=>handleContextMenu(e,chat.id)}
+                        onContextMenu={(e)=>handleContextMenuChat(e,chat.id)}
                     >
                         <ChatPreview 
                             title={chat.title}

@@ -23,15 +23,14 @@ export default function Home() {
         setIsMenuOpen(!isMenuOpen);
     };
 
-    const backend = "http://127.0.0.1:5000";
-    const chatbackend = "http://localhost:3001";
+    const backend = process.env.REACT_APP_BACKEND_URL
 
     // get data on setup
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const chatResponse = await axios.get(
-                    `${chatbackend}/message/`,
+                    `${backend}/message/`,
                     {
                         headers: headers,
                     }
@@ -56,14 +55,13 @@ export default function Home() {
     // Change displayed chat in window to chat of given id
     const handleChatChange = (id) => {
         setChatNo(id)
-        console.log(chatNo, typeof chatNo)
         setMessages(allMessages[id].messages);
     }
 
     const addChat = async (title) => {
         try {
             const chat = await axios.post(
-                `${chatbackend}/chat/`,
+                `${backend}/chat/`,
                 {title},
                 {headers}
             );
@@ -92,7 +90,7 @@ export default function Home() {
     // delete selected chat
     const deleteChat = async (id) => {
         await axios.delete(
-            `${chatbackend}/chat/${id}`,
+            `${backend}/chat/${id}`,
             {
                 headers: headers,
             }
@@ -115,7 +113,7 @@ export default function Home() {
             setInput(""); // clear user input
 
             const message = await axios.post(
-                `${chatbackend}/message/${chatNo}`,
+                `${backend}/message/${chatNo}`,
                 {
                     content: newMessage,
                     ai: type
@@ -154,8 +152,9 @@ export default function Home() {
     const getChatReply = async (input) => {
         try {
             const chatReply = await axios.post(
-                `${backend}/response`, 
-                {input}
+                `${backend}/message/response`, 
+                {input},
+                {headers}
             )
             if (chatReply && chatReply.data){
                 await addMessage(chatReply.data, true)
@@ -170,7 +169,7 @@ export default function Home() {
 
     const deleteMessage = async (id) => {
         await axios.delete(
-            `${chatbackend}/message/${id}`,
+            `${backend}/message/${id}`,
             {
                 headers: headers,
             }

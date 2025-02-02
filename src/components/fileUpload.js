@@ -11,6 +11,8 @@ export default function FileUpload({setFileList}) {
 
     // auth header to authenticate user backend requests
     const authHeader = useAuthHeader();
+    
+    const backend = process.env.REACT_APP_BACKEND_URL
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -18,14 +20,13 @@ export default function FileUpload({setFileList}) {
         formData.append('pdf', file);
         
         try {
-            const response = await axios.post('http://localhost:3001/upload/scan', formData, {
+            const response = await axios.post(`${backend}/upload/scan`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': authHeader
                 },
             });
             setFileList(files => [...files, response.data.filename])
-            console.log(response.data)
         } catch (error) {
             console.error('Error uploading file:', error);
         }
