@@ -11,7 +11,6 @@ export default function Home() {
     const [messages, setMessages] = useState([]);
     const [chatPreviews, setChatPreviews] = useState([]);
     const [chatNo, setChatNo] = useState(null);
-    const [input, setInput] = useState("");
     const [isMenuOpen, setIsMenuOpen] = useState(true);
     const authHeader = useAuthHeader();
 
@@ -55,7 +54,7 @@ export default function Home() {
     // Change displayed chat in window to chat of given id
     const handleChatChange = (id) => {
         setChatNo(id)
-        setMessages(allMessages[id].messages);
+        setMessages(allMessages[id]);
     }
 
     const addChat = async (title) => {
@@ -68,13 +67,10 @@ export default function Home() {
 
             // add received message object to messages
             if (chat && chat.data) {
-                setAllMessages(prevMessages => {
-                    prevMessages[chat.data.id] = {
-                        messages: [],
-                        title: title
-                    }
-                    return prevMessages
-                });
+                setAllMessages(prevMessages => ({
+                    ...prevMessages, 
+                    [chat.data.id]: [],
+                }));
                 setChatPreviews(oldPreviews=>[{
                     id: chat.data.id,
                     title: title
@@ -107,75 +103,7 @@ export default function Home() {
         setChatPreviews(chatPreviews.filter((chat) => chat.id !== id));
     };
 
-    // add new message to database and messages
-    const addMessage = async (newMessage, type) => {
-        try {
-            setInput(""); // clear user input
-
-            const message = await axios.post(
-                `${backend}/message/${chatNo}`,
-                {
-                    content: newMessage,
-                    ai: type
-                },
-                {headers}
-            );
-
-            // add received message object to messages
-            if (message && message.data) {
-                // update messages for chat
-                console.log(message.data)
-                setMessages(messages => [...messages, message.data]);
-                // update timestamp and lastMessage in chats column
-                setChatPreviews( oldPreviews => oldPreviews.map(preview =>
-                    preview.id === message.data.chat_id
-                      ? { ...preview, lastMessage: newMessage, timeStamp: message.data.timestamp }
-                      : preview
-                  ).sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp))
-                )
-            } else {
-                console.error("No data received");
-            }
-        } catch (error) {
-            console.error("Error sending message:", error);
-        }
-    };
-
-    // add user input to chat, get reply from chatbot, and add reply to chat
-    const handleSend = async () => {
-        if (input) {
-            await addMessage(input, false);
-            await getChatReply(input);
-        }
-    };
-
-    const getChatReply = async (input) => {
-        try {
-            const chatReply = await axios.post(
-                `${backend}/message/response`, 
-                {input},
-                {headers}
-            )
-            if (chatReply && chatReply.data){
-                await addMessage(chatReply.data, true)
-            }
-            else{console.error("No response from RAG.")}
-            
-            
-        } catch (error) {
-            console.error("Error sending message to RAG:", error);
-        }
-    };
-
-    const deleteMessage = async (id) => {
-        await axios.delete(
-            `${backend}/message/${id}`,
-            {
-                headers: headers,
-            }
-        )
-        setMessages(messages.filter((message) => message.id !== id)); // Filter out the deleted message
-    };
+    
 
     return (
         <div className="h-screen m-0 flex bg-slate-200 dark:bg-black dark:text-white ">
@@ -199,10 +127,10 @@ export default function Home() {
                 />
                 <ChatWindow
                     messages={messages}
-                    input={input}
-                    setInput={setInput}
-                    handleSend={handleSend}
-                    deleteMessage={deleteMessage}
+                    setChatPreviews={setChatPreviews}
+                    setMessages={setMessages}
+                    setAllMessages={setAllMessages}
+                    chatNo={chatNo}
                 />
             </div>
         </div>
