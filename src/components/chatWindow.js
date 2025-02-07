@@ -66,12 +66,7 @@ export default function ChatWindow({ messages, chatNo, setChatPreviews, setMessa
   const getChatReply = async (input) => {
     try {
       const emptyMessage = await addMessage("", true);
-
-      // const chatReply = await axios.post(
-      //   `${backend}/message/response`,
-      //   { input },
-      //   { headers, responseType: 'stream' },
-      // );
+      
       const chatReply = await fetch(`${backend}/message/response/${chatNo}`, {
         method: 'POST',
         headers: {
@@ -79,45 +74,52 @@ export default function ChatWindow({ messages, chatNo, setChatPreviews, setMessa
             'Authorization': headers.Authorization,
         },
         body: JSON.stringify({ input }),
-    });
-
+      });
+  
+      if (!chatReply.ok) {
+        throw new Error("Error in response: " + chatReply.statusText);
+      }
+  
       const reader = chatReply.body.getReader();
       const decoder = new TextDecoder();
       let done = false;
       let accumulatedMessage = '';
-
+  
       while (!done) {
         const { value, done: isDone } = await reader.read();
         if (isDone) {
-            done = true;
+          done = true;
         } else {
-            const chunk = decoder.decode(value, { stream: true });
-            
-            accumulatedMessage += chunk
-            setMessages(prevMessages => {
-              const lastIndex = prevMessages.length - 1;
-              const currentMessage = { ...prevMessages[lastIndex], content: accumulatedMessage };
-              return [...prevMessages.slice(0, lastIndex), currentMessage];
-            });
-
+          const chunk = decoder.decode(value, { stream: true });
+          accumulatedMessage += chunk;
+          
+          // Update messages with bot reply
+          setMessages(prevMessages => {
+            const lastIndex = prevMessages.length - 1;
+            const currentMessage = { ...prevMessages[lastIndex], content: accumulatedMessage };
+            return [...prevMessages.slice(0, lastIndex), currentMessage];
+          });
         }
-    }
-
-      if (true) {
-        
-        setAllMessages(prevAllMessages => {
-          const currentMessages = [...prevAllMessages[chatNo].slice(0,-1), {...emptyMessage, content:accumulatedMessage}];
-          return { ...prevAllMessages, [chatNo]: currentMessages };
-        });
-
-        setChatPreviews(oldPreviews => oldPreviews.map(preview =>
-          preview.id === emptyMessage.chat_id
-            ? { ...preview, lastMessage: accumulatedMessage }
-            : preview
-        ));
-      } else {
-        throw new Error("No response from RAG.");
       }
+  
+      // Update all messages and chat previews after the complete message is received
+      setAllMessages(prevAllMessages => {
+        const currentMessages = [...prevAllMessages[chatNo].slice(0, -1), { ...emptyMessage, content: accumulatedMessage }];
+        return { ...prevAllMessages, [chatNo]: currentMessages };
+      });
+  
+      setChatPreviews(oldPreviews => oldPreviews.map(preview =>
+        preview.id === emptyMessage.chat_id ? { ...preview, lastMessage: accumulatedMessage } : preview
+      ));
+
+      // update empty message with llm output
+      const finalmessage = await axios.post(
+        `${backend}/message/edit/${emptyMessage.id}`,
+        { content: accumulatedMessage },
+        { headers }
+      );
+      console.log(finalmessage)
+      
     } catch (error) {
       console.error("Error sending message to RAG:", error);
       setErrorMessage("Failed to get a response from the bot. Please try again.");
