@@ -8,9 +8,15 @@ import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 
 export default function Home() {
     const [allMessages, setAllMessages] = useState(null);
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState(() => {
+        const savedMessages = localStorage.getItem('messages');
+        return savedMessages !== null ? JSON.parse(savedMessages) : [];
+    });
     const [chatPreviews, setChatPreviews] = useState([]);
-    const [chatNo, setChatNo] = useState(null);
+    const [chatNo, setChatNo] = useState(() => {
+        const savedChatNo = localStorage.getItem('chatNo');
+        return savedChatNo !== null ? JSON.parse(savedChatNo) : null;
+    });
     const [isMenuOpen, setIsMenuOpen] = useState(true);
     const authHeader = useAuthHeader();
 
@@ -50,6 +56,16 @@ export default function Home() {
         };
         fetchData();
     }, []);
+
+    // Save messages to localStorage to fetch on refresh
+    useEffect(() => {
+        localStorage.setItem('messages', JSON.stringify(messages));
+    }, [messages]);
+    
+    // Save chat number to localStorage to fetch on refresh
+    useEffect(() => {
+        localStorage.setItem('chatNo', JSON.stringify(chatNo));
+    }, [chatNo]);
 
     // Change displayed chat in window to chat of given id
     const handleChatChange = (id) => {
