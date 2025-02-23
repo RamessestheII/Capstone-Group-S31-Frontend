@@ -1,9 +1,10 @@
 import { React, useState, useEffect, useRef } from "react";
-import SendIcon from './../send.png';
 import Messages from "./messages";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import axios from "axios";
 import { ThreeDots } from "react-loader-spinner";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPaperPlane } from "@fortawesome/free-regular-svg-icons";
 
 export default function ChatWindow({ messages, chatNo, setChatPreviews, setMessages, setAllMessages }) {
   const [input, setInput] = useState("");
@@ -161,11 +162,19 @@ export default function ChatWindow({ messages, chatNo, setChatPreviews, setMessa
   
     try {
       // Fetch 10 more messages from the backend
-      const response = await axios.post(`${backend}/message/older/${chatNo}`, 
-        { before_timestamp: messages[0].timestamp }, { headers }
-      );
-  
-      console.log('Response data:', response.data); // Debugging output
+      let response;
+      if (messages.length>0){
+        response = await axios.post(`${backend}/message/older/${chatNo}`, 
+          { before_timestamp: messages[0].timestamp }, { headers }
+        );
+    
+        console.log('Response data:', response.data); // Debugging output
+      }
+      else{
+        setNoMoreMessages(true);
+        return
+      }
+      
   
       if (response.data && response.data.length > 0) {
         // Prepend new messages to messages and allMessages
@@ -262,8 +271,8 @@ export default function ChatWindow({ messages, chatNo, setChatPreviews, setMessa
           onChange={(e) => setInput(e.target.value)}
           placeholder="Type a message..."
         />
-        <button onClick={handleSend} className="bg-transparent h-full border-none cursor-pointer ml-4">
-          <img src={SendIcon} alt="send icon" className="flex-1 h-[70%] block" />
+        <button onClick={handleSend} className="flex bg-transparent h-full w-12 border-none cursor-pointer ml-4">
+          <FontAwesomeIcon icon={faPaperPlane} className="flex-1 mt-1 h-[70%] block"/>
         </button>
       </div>
     </div>

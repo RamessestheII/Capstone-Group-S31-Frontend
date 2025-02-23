@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import { LineWave } from 'react-loader-spinner';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 
 export default function FileUpload() {
     const [files, setFiles] = useState([]);
@@ -115,7 +117,7 @@ export default function FileUpload() {
 
     return (
         <div className="flex flex-col h-full">
-            <div className="flex ml-5 border border-gray-300 rounded-full overflow-hidden h-10 w-60">
+            <div className="flex ml-8 border border-gray-300 rounded-full overflow-hidden h-10 w-60">
                 <div 
                     className={`flex-1 text-center py-2 cursor-pointer ${!isInputMode ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`} 
                     onClick={handleToggle}
@@ -187,10 +189,22 @@ export default function FileUpload() {
                     <button type="submit">Upload PDFs</button>
                 )}
             </form>
-            <div className = "flex flex-col h-80 bg-white shadow-md rounded-lg divide-y divide-gray-200 overflow-hidden hover:overflow-y-auto">
-                {fileList.map((file, index) => (
-                        <div key={index} className="p-4 hover:bg-gray-100 transition" onContextMenu={(e)=>handleContextMenuFile(e, file)}>{file.file}</div>
-                    ))}
+            <div className = "flex flex-col h-80 pr-1 bg-white shadow-md rounded-lg divide-y divide-gray-200 overflow-hidden hover:overflow-y-auto">
+            {fileList.map((file, index) => (
+                <div className='group flex w-full justify-between content-center  hover:bg-gray-100 transition' key={index}>
+                    <div  
+                        className="p-4 max-w-[260px]" 
+                        onContextMenu={(e) => handleContextMenuFile(e, file)}
+                    >
+                        <p className="overflow-hidden overflow-ellipsis">
+                            {file.file}
+                        </p>
+                    </div>
+                    <button className='my-3 mx-2 h-7 w-7 p-1' onClick={(e)=>handleContextMenuFile(e, file)}>
+                        <FontAwesomeIcon icon={faTrashCan} className='h-full w-full'/>
+                    </button>
+                </div>
+            ))}
             </div>
         </div>
         

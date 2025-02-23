@@ -1,9 +1,8 @@
-// src/Navbar.js
-
 import React, { useState, useEffect, useRef } from 'react';
-import ProfilePicture from './../profile.png'
 import STLogo from './../logo.png'
 import { useAuth } from '../Auth';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 
 const Navbar = () => {
@@ -41,16 +40,16 @@ const Navbar = () => {
     <nav className="flex justify-between items-center h-[10%] bg-white">
       <div className='flex'>
         <div className='flex align-middle'>
-          <img src={STLogo} alt='steng-logo' className='w-36 ml-12'/>
-          <p className='mt-7 ml-3 font-sans font-bold text-20 text-gray-700'>ChatBot</p>
+          <img src={STLogo} alt='steng-logo' className='w-36 ml-16 mt-1'/>
+          <p className='mt-8 ml-3 font-sans font-bold text-20 text-gray-700'>ChatBot</p>
         </div>
         
       </div>
       
-      <div className="flex items-center text-white text-lg font-bold relative mr-10">
-        <button onClick={toggleOverlay} className="bg-white text-gray-500 border-none px-4 py-2 cursor-pointer text-base flex items-center">
-          <img src={ProfilePicture} alt='profile' className='w-10'/>
-          <p className='ml-2'>User</p>
+      <div className="flex h-full items-center text-white text-lg font-bold relative mr-10">
+        <button onClick={toggleOverlay} className="bg-white text-gray-500 border-none px-4 py-2 h-full cursor-pointer text-base flex items-center">
+          <FontAwesomeIcon icon={faUser} className="h-6"/>
+          <p className='ml-4'>User</p>
         </button>
         {isOpen && (
           <div className="absolute top-full left-0 bg-white bg-opacity-90 p-4 rounded-lg shadow-lg z-10" ref={overlayRef}>

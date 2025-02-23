@@ -1,9 +1,9 @@
 import React, {useState} from "react";
 import ChatPreview from "./chatPreview";
-import AddIcon from "./../add.png";
-import Upload from "./../upload.png";
 import TitleModal from "./titleModal";
 import FileUpload from "./fileUpload";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faArrowUpFromBracket, faArrowLeft} from "@fortawesome/free-solid-svg-icons";
   
 
 export default function ChatsColumn({ chatPreviews, handleChatChange, addChat, onDeleteChat }) {
@@ -26,32 +26,40 @@ export default function ChatsColumn({ chatPreviews, handleChatChange, addChat, o
                     onClose={() => setIsDialogOpen(false)}
                     onSubmit={addChat}
                 />
-                <button className="flex bg-white m-4 py-4 px-6" onClick={() => setIsDialogOpen(true)}>
-                    <img src={AddIcon} alt="add" style={{ height: 24 }} />
-                    <p >New Chat</p>
+                {!fileShown?
+                <div className="flex">
+                    <button className="flex bg-white w-[105px] h-20 m-4" onClick={() => setIsDialogOpen(true)}>
+                        <FontAwesomeIcon icon={faPlus} className="h-4 pt-7 pl-5"/>
+                        <p className="p-5">New Chat</p>
+                    </button>
+                    <button className="flex bg-white w-[105px] h-20 m-4" onClick={() => setFileShown(prev=>!prev)}>
+                        <FontAwesomeIcon icon={faArrowUpFromBracket} className="h-4 pt-7 pl-5"/>
+                        <p className="p-5">Add Files</p>
+                    </button>
+                </div>
+                :
+                <button className="flex bg-white w-[105px] h-20 m-4" onClick={() => setFileShown(prev=>!prev)}>
+                    <FontAwesomeIcon icon={faArrowLeft} className="h-4 pt-7 pl-5"/>
+                    <p className="pl-3 pt-6">Chats</p>
                 </button>
-                <button className="flex bg-white m-4 py-4 px-6" onClick={() => setFileShown(prev=>!prev)}>
-                    <img src={Upload} alt="add" style={{ height: 24 }} />
-                    <p >Add Files</p>
-                </button>
+                }
+                
             </div>
             
             <div className=" flex flex-col overflow-hidden">
                 {fileShown ? 
                     <FileUpload/>
                 : 
-                <div className="flex flex-col overflow-hidden hover:overflow-y-auto">
+                <div className="h-full w-full mr-1 flex flex-col overflow-hidden hover:overflow-y-auto">
                     {chatPreviews.map((chat, index) => (
-                        <button 
+                        <ChatPreview 
+                            title={chat.title}
+                            lastMessage={chat.lastMessage}
+                            timeStamp={chat.timeStamp}
                             onClick={async()=>{handleChatChange(chat.id)}} key={index} 
                             onContextMenu={(e)=>handleContextMenuChat(e,chat.id)}
-                        >
-                            <ChatPreview 
-                                title={chat.title}
-                                lastMessage={chat.lastMessage}
-                                timeStamp={chat.timeStamp}
-                            />
-                        </button>
+                        />
+                        
                     ))}
                 </div>
                 }

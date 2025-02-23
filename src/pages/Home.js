@@ -3,8 +3,9 @@ import ChatWindow from "../components/chatWindow";
 import ChatsColumn from "../components/chatsColumn";
 import Navbar from "../components/navbar";
 import axios from "axios";
-import HamburgerMenu from "./../hamburger.png";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faBars} from '@fortawesome/free-solid-svg-icons'
 
 export default function Home() {
     const [allMessages, setAllMessages] = useState(null);
@@ -125,10 +126,10 @@ export default function Home() {
         <div className="h-screen m-0 flex bg-slate-200 dark:bg-black dark:text-white ">
             
             <button onClick={toggleMenu} className="absolute bg-transparent border-none cursor-pointer mt-3 p-0 z-10">
-                <img src={HamburgerMenu} alt="menu icon" className="w-12 h-12 pl-2 pt-2 block" />
+            <FontAwesomeIcon icon={faBars} className="w-10 h-10 pl-2 pt-2 block"/>
             </button>
 
-            <div className={`h-full fixed top-0 left-0  transition-transform ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} w-80`}>
+            <div className={`h-full fixed top-0 left-0 border-r-2 border-gray-300 transition-transform ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} w-80`}>
                 <ChatsColumn 
                     chatPreviews={chatPreviews} 
                     handleChatChange={handleChatChange}
