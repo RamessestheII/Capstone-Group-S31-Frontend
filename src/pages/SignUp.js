@@ -1,33 +1,45 @@
 import React, { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 
 const SignUp = () => {
-  const [username, setUsername] = useState('');
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [redirect, setRedirect] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    if (!username || !email || !password) {
+    if (!email || !password) {
       setError('Please fill in all fields');
       return;
     }
-    console.log('Signing up:', { username, email, password });
-    setError('');
+    
+    const response = await fetch('http://localhost:3001/auth/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (response.ok) {
+      setRedirect(true); // Set redirect to true on successful login
+    } else {
+      setError('Signup failed')
+      console.error('Signup failed');
+    }
   };
+
+  // Redirect if login is successful
+  if (redirect) {
+    return <Navigate to="/login" />;
+  }
 
   return (
     <div className="auth-container">
       <form className="auth-form" onSubmit={handleSubmit}>
         <h2>Sign Up</h2>
         {error && <p>{error}</p>}
-        <label>Username:</label>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
+        
         <label>Email:</label>
         <input
           type="email"
