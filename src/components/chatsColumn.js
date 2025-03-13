@@ -19,7 +19,7 @@ export default function ChatsColumn({ chatPreviews, handleChatChange, addChat, o
     };
 
     return (
-        <div className="h-full mt-12 flex flex-col">
+        <div className="h-full mt-12 flex flex-col justify-between">
             <div className="flex p-3">
                 <TitleModal
                     isOpen={isDialogOpen}
@@ -46,7 +46,7 @@ export default function ChatsColumn({ chatPreviews, handleChatChange, addChat, o
                 
             </div>
             
-            <div className=" flex flex-col overflow-hidden">
+            <div className=" flex flex-col overflow-hidden h-full">
                 {fileShown ? 
                     <FileUpload/>
                 : 

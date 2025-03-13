@@ -7,7 +7,7 @@ export default function Messages({messages, deleteMessage, chatNo, sentinelRef, 
     useEffect(() => {
     // Scroll to the bottom of the messages container when the component mounts
     messagesEndRef.current?.scrollIntoView({ behavior: 'auto', block: 'end' });
-    }, [chatNo]);
+    }, [chatNo, messages]);
 
 return (
     <div className="flex flex-col overflow-y-auto h-full" ref={messagesContainerRef}>

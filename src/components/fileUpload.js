@@ -4,15 +4,15 @@ import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import { LineWave } from 'react-loader-spinner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
+import SearchBox from './searchBox';
 
 export default function FileUpload() {
     const [files, setFiles] = useState([]);
     const [sectors, setSectors] = useState([]);
     const [loading, setLoading] = useState(false);
     const [fileList, setFileList] = useState([]);
-
-    const [isInputMode, setIsInputMode] = useState(false);
-    const [inputValue, setInputValue] = useState('');
+    const [filteredFileList, setFilteredFileList] = useState([])
+    const [next, setNext] = useState(false)
     const [selectedSector, setSelectedSector] = useState('');
 
     const handleFileChange = (e) => {
@@ -56,28 +56,17 @@ export default function FileUpload() {
         fetchData();
     }, []);
 
-    const handleToggle = () => {
-        setIsInputMode(!isInputMode);
-        if (isInputMode) {
-            setInputValue(''); // Clear input when switching to dropdown
+    // useEffect to filter displayed file list when sector is selected/unselected
+    useEffect(()=>{
+        if (next){
+            setFilteredFileList(fileList.filter((file) => file.sector === selectedSector))
         }
-    };
-
-    const handleInputChange = (e) => {
-        setInputValue(e.target.value);
-    };
-
-    const handleSelectChange = (e) => {
-        setSelectedSector(e.target.value);
-    };
-
-    const handleAddOption = () => {
-        if (inputValue && !sectors.includes(inputValue)) {
-            setSectors([...sectors, inputValue]);
-            setSelectedSector(inputValue); // Set the new option as selected
-            setInputValue(''); // Clear input after adding
+        else{
+            setFilteredFileList(fileList)
         }
-    };
+    }, [fileList, selectedSector, next])
+
+    
 
     const handleContextMenuFile = async(e, selectedFile) => {
         e.preventDefault(); // Prevent the default context menu from appearing
@@ -90,6 +79,28 @@ export default function FileUpload() {
             // update useState file list
             setFileList(fileList.filter((file) => file.file !== selectedFile.file));
         }
+    }
+
+    const onNext = () =>{
+        if (selectedSector === ''){
+            window.alert('Enter or choose a sector.')
+            return
+        }
+        // check if sector is new or existing
+        if (!sectors.includes(selectedSector)) {
+            // user confirmation to create new kb when file/s are added
+            if (window.confirm(`Create new knowledge base ${selectedSector} ?`)){
+                setSectors([...sectors, selectedSector]);
+                console.log(selectedSector)
+                // display add files form, hide search box
+                setNext(true)
+            }
+        }
+        else{
+            // display add files form, hide search box
+            setNext(true)
+        }
+        
     }
 
     const handleSubmit = async (e) => {
@@ -116,81 +127,51 @@ export default function FileUpload() {
     };
 
     return (
-        <div className="flex flex-col h-full">
-            <div className="flex ml-8 border border-gray-300 rounded-full overflow-hidden h-10 w-60">
-                <div 
-                    className={`flex-1 text-center py-2 cursor-pointer ${!isInputMode ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`} 
-                    onClick={handleToggle}
-                >
-                    Select Sector
-                </div>
-                <div 
-                    className={`flex-1 text-center py-2 cursor-pointer ${isInputMode ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`} 
-                    onClick={handleToggle}
-                >
-                    New Sector
-                </div>
-            </div>
-
-            {isInputMode ? (
-                <div className="mt-4">
-                    <input 
-                        type="text" 
-                        value={inputValue} 
-                        onChange={handleInputChange} 
-                        placeholder="Enter new option" 
-                        className="border border-gray-300 rounded p-2"
-                    />
-                    <button 
-                        onClick={handleAddOption} 
-                        className="ml-2 bg-blue-500 text-white rounded px-4 py-2"
-                    >
-                        Add Option
-                    </button>
-                </div>
+        <div className="flex flex-col h-full justify-between">
+            {!next? (
+                <SearchBox 
+                items={sectors} 
+                searchTerm={selectedSector} 
+                setSearchTerm={setSelectedSector}
+                onNext={onNext}
+            />
             ) : (
-                <select 
-                    value={selectedSector} 
-                    onChange={handleSelectChange} 
-                    className="mt-4 border border-gray-300 rounded p-2"
-                >
-                    <option value="">Select a sector</option>
-                    {sectors.map((sector, index) => (
-                        <option key={index} value={sector}>
-                            {sector}
-                        </option>
-                    ))}
-                </select>
-            )}
-
-            <form onSubmit={handleSubmit}>
-                <input 
-                    type="file" 
-                    className="block w-full text-sm text-gray-500 
-                                file:mr-4 file:py-2 file:px-4 
-                                file:rounded file:border file:border-gray-300 
-                                file:text-sm file:font-semibold 
-                                file:bg-blue-100 file:text-black 
-                                hover:file:bg-blue-100 transition duration-200 
-                                focus:outline-none focus:ring-2 focus:border-transparent"
-                    accept="application/pdf" 
-                    onChange={handleFileChange} 
-                    multiple // Allow multiple files
-                />
-                {loading ? (
-                    <LineWave
-                        visible={true}
-                        height="100"
-                        width="100"
-                        color="#4fa94d"
-                        ariaLabel="line-wave-loading"
+                <form onSubmit={handleSubmit}>
+                    <input 
+                        type="file" 
+                        className="block w-full text-sm text-gray-500 
+                                    file:mr-4 file:py-2 file:px-4 
+                                    file:rounded file:border file:border-gray-300 
+                                    file:text-sm file:font-semibold 
+                                    file:bg-blue-100 file:text-black 
+                                    hover:file:bg-blue-100 transition duration-200 
+                                    focus:outline-none focus:ring-2 focus:border-transparent"
+                        accept="application/pdf" 
+                        onChange={handleFileChange} 
+                        multiple // Allow multiple files
                     />
-                ) : (
-                    <button type="submit">Upload PDFs</button>
-                )}
-            </form>
-            <div className = "flex flex-col h-80 pr-1 bg-white shadow-md rounded-lg divide-y divide-gray-200 overflow-hidden hover:overflow-y-auto">
-            {fileList.map((file, index) => (
+                    {loading ? (
+                        <LineWave
+                            visible={true}
+                            height="100"
+                            width="100"
+                            color="#4fa94d"
+                            ariaLabel="line-wave-loading"
+                        />
+                    ) : (
+                        <div className='flex'>
+                            <button type="button" onClick={()=>setNext(false)} className="ml-2 bg-blue-500 text-sm text-white rounded px-4 py-2">Back</button>
+                            <button type="submit" className="ml-2 bg-blue-500 text-sm text-white rounded px-4 py-2">Upload PDFs</button>
+                        </div>
+                        
+                    )}
+                </form>
+            )
+
+            }
+            
+            <div className = "flex flex-col h-5/6 pr-1 bg-white shadow-md rounded-lg divide-y divide-gray-200 overflow-hidden hover:overflow-y-auto">
+            {filteredFileList.map((file, index) => (
                 <div className='group flex w-full justify-between content-center  hover:bg-gray-100 transition' key={index}>
                     <div  
                         className="p-4 max-w-[260px]" 
