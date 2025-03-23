@@ -9,15 +9,9 @@ import {faBars} from '@fortawesome/free-solid-svg-icons'
 
 export default function Home() {
     const [allMessages, setAllMessages] = useState(null);
-    const [messages, setMessages] = useState(() => {
-        const savedMessages = localStorage.getItem('messages');
-        return savedMessages !== null ? JSON.parse(savedMessages) : [];
-    });
+    const [messages, setMessages] = useState([]);
     const [chatPreviews, setChatPreviews] = useState([]);
-    const [chatNo, setChatNo] = useState(() => {
-        const savedChatNo = localStorage.getItem('chatNo');
-        return savedChatNo !== null ? JSON.parse(savedChatNo) : null;
-    });
+    const [chatNo, setChatNo] = useState(null);
     const [isMenuOpen, setIsMenuOpen] = useState(true);
     const authHeader = useAuthHeader();
 
@@ -137,18 +131,25 @@ export default function Home() {
                     onDeleteChat={deleteChat}
                 />
             </div>
-            <div className={`flex flex-col w-full h-full overflow-hidden transition-margin-left ${isMenuOpen ? 'ml-80' : 'ml-0'}`}>
+            <div className={`flex flex-col w-full h-full overflow-hidden justify-between transition-margin-left ${isMenuOpen ? 'ml-80' : 'ml-0'}`}>
                 <Navbar 
                     isMenuOpen={isMenuOpen}
                     toggleMenu={toggleMenu}
                 />
-                <ChatWindow
-                    messages={messages}
-                    setChatPreviews={setChatPreviews}
-                    setMessages={setMessages}
-                    setAllMessages={setAllMessages}
-                    chatNo={chatNo}
-                />
+                {chatNo?
+                    (
+                        <ChatWindow
+                            messages={messages}
+                            setChatPreviews={setChatPreviews}
+                            setMessages={setMessages}
+                            setAllMessages={setAllMessages}
+                            chatNo={chatNo}
+                        />
+                    ):
+                    (< div className="self-center mb-[30%] text-lg text-gray-600 font-sans font-semibold"> Select Chat or Create New Chat</div>)
+    
+                    }
+                
             </div>
         </div>
     );

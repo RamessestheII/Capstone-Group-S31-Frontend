@@ -16,7 +16,7 @@ const TitleModal = ({ isOpen, onClose, onSubmit }) => {
           type="text"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          placeholder="Enter your input"
+          placeholder="Enter chat name"
         />
         <button onClick={handleSubmit}>Submit</button>
       </div>

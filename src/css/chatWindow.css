@@ -1,25 +1,3 @@
-
-  .AIMessage {
-  padding: 8px;
-  border-radius: 4px;
-  margin: 5px 0;
-  margin-left: 16.5%;
-  margin-bottom: 60px;
-  background-color: #e1ffc7;
-  align-self: flex-start;
-  height: fit-content;
-  }
-  
-.userMessage {
-  padding: 8px;
-  border-radius: 4px;
-  margin: 5px 0;
-  margin-right: 16.5%;
-  background-color: #26e787;
-  align-self: flex-end;
-  height: fit-content;
-}
-  
   /* Styles for the button containing the image */
 .send-button {
   background: none; /* No background */

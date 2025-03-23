@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
-import { LineWave } from 'react-loader-spinner';
+import { Oval } from 'react-loader-spinner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import SearchBox from './searchBox';
@@ -151,13 +151,16 @@ export default function FileUpload() {
                         multiple // Allow multiple files
                     />
                     {loading ? (
-                        <LineWave
-                            visible={true}
-                            height="100"
-                            width="100"
-                            color="#4fa94d"
-                            ariaLabel="line-wave-loading"
-                        />
+                        <div className=' flex my-2 ml-4'>
+                            <Oval
+                                visible={true}
+                                height="30"
+                                width="30"
+                                color="#4fa94d"
+                                ariaLabel="line-wave-loading"
+                            />
+                            <p className='pl-3 pt-1 text-sm'>Adding files...</p>
+                        </div>
                     ) : (
                         <div className='flex'>
                             <button type="button" onClick={()=>setNext(false)} className="ml-2 bg-blue-500 text-sm text-white rounded px-4 py-2">Back</button>

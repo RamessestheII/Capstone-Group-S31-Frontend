@@ -18,6 +18,7 @@
 /* Handle */
 ::-webkit-scrollbar-thumb {
     background: #bdbaba;
+    width: 4px;
     border-radius: 3px;
 }
 
@@ -26,4 +27,41 @@
     background: #9c9b9b;
 }
 
+.popup {
+  margin: auto;
+  background: rgb(255, 255, 255);
+  width: 500px;
+  height: 200px;
+  padding: 5px;
+  overflow-y: auto;
+  font-size: small;
+}
 
+.popup-content {
+    margin: auto;
+    background: rgb(255, 255, 255);
+    width: 500px;
+    overflow-wrap: break-word;
+    height: 200px;
+    padding: 5px;
+    overflow-y: auto;
+    font-size: small;
+  }
+  .popup-arrow {
+    color: transparent
+  }
+  [role='tooltip'].popup-content {
+    max-width: 1000px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 0px 3px;
+  }
+  
+  .popup-overlay {
+    max-width: 1000px;
+    background: rgba(0, 0, 0, 0.5);
+  }
+  [data-popup='tooltip'].popup-overlay {
+    max-width: 1000px;
+    background: transparent;
+  }
+
+  

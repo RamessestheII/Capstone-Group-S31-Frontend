@@ -29,7 +29,7 @@ const Login = () => {
       await login(data.userId, data.token);
       setRedirect(true); // Set redirect to true on successful login
     } else {
-      setError('Signup failed')
+      setError('Login failed')
       console.error('Login failed');
     }
   };

@@ -16,7 +16,7 @@ export default function ChatPreview({title, lastMessage, timeStamp, onClick, onC
     // flex h-full w-full px-20 border-y border-gray-300  
     return (
         <button 
-            className="flex min-h-20 border-y items-center justify-between border-gray-300 overflow-hidden"
+            className="flex min-h-20 border-y-2 items-center justify-between border-gray-300 overflow-hidden"
             onClick={onClick}
             onContextMenu={onContextMenu}
         >

@@ -1,6 +1,9 @@
 import React from "react";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import DropDown from "./dropDown";
+import Popup from 'reactjs-popup'
+import 'reactjs-popup/dist/index.css';
 
 export default function MessageBox({message, onDelete}){
     const handleContextMenu = (e) => {
@@ -10,22 +13,71 @@ export default function MessageBox({message, onDelete}){
         }
     };
 
-    const containsMarkdown = message.content.includes('|');
+    // text to be displayed as the message and source information respectively
+    let messageText = ''
+    let source = ''
+    // split source information from message information using || demarcator
+    if (message.content.includes('|')){
+        const messageParts = message.content.split('||')
+        messageText = messageParts.slice(0,messageParts.length-1).join('||')
+        source = messageParts[messageParts.length -1]
+    }
+    else{
+        messageText = message.content
+    }
+
+    const SourceElem = ()=>{
+        return (
+            <p className="self-start text-sm mt-2 px-[2px] text-slate-700 rounded-md bg-slate-300 hover:bg-slate-400">Source</p>
+        )
+    }
+    const SourceContent = ()=>{
+        return (
+            <span className=" max-h-48 break-words text-sm overflow-y-auto">
+                {source}
+            </span>
+        )
+    }
+    
     
     return (
-        <div className={message.ai === true ? "p-2 rounded-md my-1 ml-[16.5%] mb-[50px] bg-green-50 self-start h-fit":"p-2 rounded-md my-1 mr-[16.5%] mb-[50px] bg-green-300 self-end h-fit"} onContextMenu={handleContextMenu}>
-            <div className="flex flex-col max-w-lg break-words p-2">
-                {containsMarkdown ? (
+        <div className={message.ai === true ? " p-2 rounded-md my-1 ml-[16.5%] mb-[50px] bg-green-50 self-start h-fit":"p-2 rounded-md my-1 mr-[16.5%] mb-[50px] bg-green-300 self-end h-fit"} onContextMenu={handleContextMenu}>
+            <div className="flex flex-col p-2">
+                <div className="max-w-lg font-thin break-words">
+                    {/* render markdown text if needed */}
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                        {message.content}
+                        {messageText}
                     </ReactMarkdown>
-                ) : (
-                    <p>{message.content}</p> // Render as plain text if no Markdown
-                )}
-                <span className="self-end">
+                </div>
+                
+                {message.ai && source?
+                (
+                    // <Popup
+                    //     trigger={open => (
+                    //     <p className="self-start text-sm mt-2 px-[2px] text-slate-700 rounded-md bg-slate-300 hover:bg-slate-400">Source</p>
+                    //     )}
+                    //     position="top left"
+                    //     on={['hover', 'focus']}
+                    //     closeOnDocumentClick
+                    // >
+                    //     <span style={{width:"1000px"}}>{source}</span>
+                    // </Popup>
+                    <DropDown
+                        Trigger={SourceElem}
+                        Display={SourceContent}
+                        hover
+                        top
+                    />
+                ):
+                (<></>)
+
+                }
+                
+                <span className="self-end text-sm">
                     {new Date(message.timestamp).toLocaleString()} {/* Format the timestamp */}
                 </span>
             </div>
+
         </div>
     );
 }
