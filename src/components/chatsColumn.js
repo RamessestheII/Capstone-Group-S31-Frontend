@@ -1,13 +1,13 @@
 import React, {useState} from "react";
 import ChatPreview from "./chatPreview";
-import TitleModal from "./titleModal";
 import FileUpload from "./fileUpload";
+import Modal from "./modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faArrowUpFromBracket, faArrowLeft} from "@fortawesome/free-solid-svg-icons";
   
 
 export default function ChatsColumn({ chatPreviews, handleChatChange, addChat, onDeleteChat }) {
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    // const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [fileShown, setFileShown] = useState(false);
 
 
@@ -18,20 +18,32 @@ export default function ChatsColumn({ chatPreviews, handleChatChange, addChat, o
         }
     };
 
+    const AddChatButton = ({onClick})=>{
+        return (
+            <button className="flex bg-white w-[105px] h-20 m-4" onClick={onClick}>
+                <FontAwesomeIcon icon={faPlus} className="h-4 pt-7 pl-5"/>
+                <p className="p-5">New Chat</p>
+            </button>
+        )
+    }
+    
+    const modalText = "Chat name?"
+    const chatNamePlaceholder = "  Enter chat name"
+    const submitText = "Add Chat"
+
     return (
         <div className="h-full mt-12 flex flex-col justify-between">
             <div className="flex p-3">
-                <TitleModal
-                    isOpen={isDialogOpen}
-                    onClose={() => setIsDialogOpen(false)}
-                    onSubmit={addChat}
-                />
                 {!fileShown?
                 <div className="flex">
-                    <button className="flex bg-white w-[105px] h-20 m-4" onClick={() => setIsDialogOpen(true)}>
-                        <FontAwesomeIcon icon={faPlus} className="h-4 pt-7 pl-5"/>
-                        <p className="p-5">New Chat</p>
-                    </button>
+                    <Modal
+                        Trigger={AddChatButton}
+                        modalText={modalText}
+                        inputPlaceholder={chatNamePlaceholder}
+                        onSubmit={addChat}
+                        submitText={submitText}
+                        clickAway
+                    />
                     <button className="flex bg-white w-[105px] h-20 m-4" onClick={() => setFileShown(prev=>!prev)}>
                         <FontAwesomeIcon icon={faArrowUpFromBracket} className="h-4 pt-7 pl-5"/>
                         <p className="p-5">Add Files</p>

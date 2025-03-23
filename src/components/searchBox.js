@@ -77,7 +77,7 @@ const SearchBox = ({ items , searchTerm, setSearchTerm, onNext}) => {
           ))}
         </ul>
       )}
-      <button className="bg-blue-500 text-white rounded-r-lg p-2 mx-1" onClick={onNext}>
+      <button className="bg-gray-400 hover:bg-gray-500 text-white rounded-r-lg p-2 mx-1" onClick={onNext}>
         Next
       </button>
     </div>

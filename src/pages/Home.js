@@ -146,7 +146,7 @@ export default function Home() {
                             chatNo={chatNo}
                         />
                     ):
-                    (< div className="self-center mb-[30%] text-lg text-gray-600 font-sans font-semibold"> Select Chat or Create New Chat</div>)
+                    (< div className="self-center mb-[30%] text-2xl text-gray-400 font-sans font-semibold"> Select Chat or Create New Chat</div>)
     
                     }
                 

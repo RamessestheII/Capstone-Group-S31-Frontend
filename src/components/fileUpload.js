@@ -163,8 +163,8 @@ export default function FileUpload() {
                         </div>
                     ) : (
                         <div className='flex'>
-                            <button type="button" onClick={()=>setNext(false)} className="ml-2 bg-blue-500 text-sm text-white rounded px-4 py-2">Back</button>
-                            <button type="submit" className="ml-2 bg-blue-500 text-sm text-white rounded px-4 py-2">Upload PDFs</button>
+                            <button type="button" onClick={()=>setNext(false)} className="ml-2 bg-gray-400 hover:bg-gray-500 text-sm text-white rounded px-4 py-2">Back</button>
+                            <button type="submit" className="ml-2 bg-gray-400 hover:bg-gray-500 text-sm text-white rounded px-4 py-2">Upload PDFs</button>
                         </div>
                         
                     )}
