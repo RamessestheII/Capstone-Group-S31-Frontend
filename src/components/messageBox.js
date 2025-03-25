@@ -2,8 +2,6 @@ import React from "react";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import DropDown from "./dropDown";
-import Popup from 'reactjs-popup'
-import 'reactjs-popup/dist/index.css';
 
 export default function MessageBox({message, onDelete}){
     const handleContextMenu = (e) => {
@@ -20,20 +18,30 @@ export default function MessageBox({message, onDelete}){
     if (message.content.includes('|')){
         const messageParts = message.content.split('||')
         messageText = messageParts.slice(0,messageParts.length-1).join('||')
-        source = messageParts[messageParts.length -1]
+        // get source element, remove trailing pipe | characters
+        source = messageParts[messageParts.length -1].replace(/^\|+|\|+$/g, '')
     }
     else{
         messageText = message.content
     }
 
-    const SourceElem = ()=>{
+    const SourceElem = ({onMouseEnter, onMouseLeave})=>{
         return (
-            <p className="self-start text-sm mt-2 px-[2px] text-slate-700 rounded-md bg-slate-300 hover:bg-slate-400">Source</p>
+            <div 
+                className="pt-2"
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+            >
+                <p className="self-start text-sm px-[4px] text-slate-700 rounded-md bg-slate-300 hover:bg-slate-400">
+                    Source
+                </p>
+            </div>
+            
         )
     }
     const SourceContent = ()=>{
         return (
-            <span className=" max-h-48 break-words text-sm overflow-y-auto">
+            <span className="text-sm">
                 {source}
             </span>
         )

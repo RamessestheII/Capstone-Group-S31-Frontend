@@ -1,13 +1,13 @@
 import {React, useRef, useEffect} from "react";
 import MessageBox from "./messageBox";
 
-export default function Messages({messages, deleteMessage, chatNo, sentinelRef, messagesContainerRef}){
+export default function Messages({messages, deleteMessage, chatNo, sentinelRef, messagesContainerRef, newMessageBoolean}){
     const messagesEndRef = useRef(null);
 
     useEffect(() => {
-    // Scroll to the bottom of the messages container when the component mounts
+    // Scroll to the bottom of the messages container when the component mounts, or different chat is loaded
     messagesEndRef.current?.scrollIntoView({ behavior: 'auto', block: 'end' });
-    }, [chatNo, messages]);
+    }, [chatNo, newMessageBoolean]);
 
 return (
     <div className="flex flex-col overflow-y-auto h-full" ref={messagesContainerRef}>

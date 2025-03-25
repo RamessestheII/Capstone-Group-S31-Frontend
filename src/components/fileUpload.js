@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import SearchBox from './searchBox';
 
-export default function FileUpload() {
+export default function FileUpload({fileShown}) {
     const [files, setFiles] = useState([]);
     const [sectors, setSectors] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -105,6 +105,9 @@ export default function FileUpload() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        // check if files have been selected, else return
+        if (files.length===0){return;}
+
         const formData = new FormData();
         
         // Append each selected file to formData
@@ -127,7 +130,7 @@ export default function FileUpload() {
     };
 
     return (
-        <div className="flex flex-col h-full justify-between">
+        <div className={`flex flex-col h-full justify-between ${fileShown? '':'hidden'}`}>
             {!next? (
                 <SearchBox 
                 items={sectors} 

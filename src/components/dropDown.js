@@ -34,9 +34,9 @@ const DropDown = ({Trigger, Display, hover, top, bottom}) =>{
     };
 
     const componentClassName = `flex h-full text-lg relative mr-10`
-    console.log(componentClassName)
+
     // customisable css for Display
-    const displayClassName = `absolute max-h-48 overflow-y-auto ${bottom?'top-full':''} ${top?'bottom-full':''} left-0 bg-white bg-opacity-90 p-4 rounded-lg shadow-lg z-10`;
+    const displayClassName = `absolute max-h-48 max-w-[500px] break-words overflow-y-auto ${bottom?'top-full':''} ${top?'bottom-full':''} left-0 bg-white bg-opacity-90 p-4 rounded-lg shadow-lg z-10`;
 
     useEffect(() => {
         if (isOpen && !hover) {
@@ -51,13 +51,13 @@ const DropDown = ({Trigger, Display, hover, top, bottom}) =>{
         return () => {
           document.removeEventListener('mousedown', handleClickOutside);
         };
-      }, [isOpen]);
+      }, [isOpen, hover]);
 
     return (
-        <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={componentClassName}>
-            <Trigger  onClick={toggleOverlay}/>
+        <div className={componentClassName}>
+            <Trigger onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} onClick={toggleOverlay}/>
             {isOpen && (
-                <div className={displayClassName} ref={overlayRef}>
+                <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={displayClassName} ref={overlayRef}>
                     <Display/>
                 </div>
             )}

@@ -8,7 +8,7 @@ export default function ChatPreview({title, lastMessage, timeStamp, onClick, onC
         timeStamp = ''
     }
     if (typeof lastMessage == 'string'){
-        lastMessage = lastMessage.slice(0,20)
+        lastMessage = lastMessage
     }
     else{
         lastMessage = ''
@@ -16,14 +16,14 @@ export default function ChatPreview({title, lastMessage, timeStamp, onClick, onC
     // flex h-full w-full px-20 border-y border-gray-300  
     return (
         <button 
-            className="flex min-h-20 border-y-2 items-center justify-between border-gray-300 overflow-hidden"
+            className="flex min-h-20 border-t-2 items-center justify-between border-gray-300 overflow-hidden"
             onClick={onClick}
             onContextMenu={onContextMenu}
         >
             <div className="flex flex-col flex-1">
                 
-                <p className="text-xl pb-1">{title}</p>
-                <p className="ml-10 pb-1">{lastMessage}</p>
+                <p className="self-start text-xl ml-10 w-24 overflow-hidden whitespace-nowrap text-ellipsis mb-1">{title}</p>
+                <p className="self-start text-sm ml-10 w-32 overflow-hidden whitespace-nowrap text-ellipsis mb-1">{lastMessage}</p>
             </div>
             <p style={{flex: 1}}>{timeStamp}</p> {/* Push timeStamp to the right */}
         </button>

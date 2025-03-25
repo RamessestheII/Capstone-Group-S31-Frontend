@@ -1,6 +1,7 @@
 import { React, useState, useEffect, useRef } from "react";
 import Messages from "./messages";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
+import getChatReply from "../utils/getChatReply";
 import axios from "axios";
 import { ThreeDots } from "react-loader-spinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,6 +12,7 @@ export default function ChatWindow({ messages, chatNo, setChatPreviews, setMessa
   const [errorMessage, setErrorMessage] = useState(null);
   const [loadingMore, setLoadingMore] = useState(false);
   const [noMoreMessages, setNoMoreMessages] = useState(false);
+  const [newMessageBoolean, setNewMessageBoolean] = useState(false);
   const messagesContainerRef = useRef(null);
   const sentinelRef = useRef(null);
   const authHeader = useAuthHeader();
@@ -39,6 +41,9 @@ export default function ChatWindow({ messages, chatNo, setChatPreviews, setMessa
           return { ...prevAllMessages, [chatNo]: currentMessages };
         });
 
+        // change newMessageBoolean (passed as prop to messages) to indicate scroll to bottom of page
+        setNewMessageBoolean(newMessageBoolean=>!newMessageBoolean);
+
         // Update chat previews
         setChatPreviews(oldPreviews => {
           const index = oldPreviews.findIndex(preview => preview.id === message.data.chat_id);
@@ -55,7 +60,6 @@ export default function ChatWindow({ messages, chatNo, setChatPreviews, setMessa
         throw new Error("No data received");
       }
     } catch (error) {
-      console.error("Error sending message:", error);
       setErrorMessage("Failed to send message. Please try again.");
     }
   };
@@ -63,81 +67,18 @@ export default function ChatWindow({ messages, chatNo, setChatPreviews, setMessa
   const handleSend = async () => {
     if (input) {
       await addMessage(input, false);
-      await getChatReply(input);
+      await getChatReply(headers, backend, input, chatNo, addMessage, setMessages, setAllMessages, setChatPreviews, setErrorMessage);
     } else {
       setErrorMessage("Message cannot be empty.");
     }
   };
 
-  const getChatReply = async (input) => {
-    try {
-      const emptyMessage = await addMessage("", true);
-      
-      const chatReply = await fetch(`${backend}/message/response`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': headers.Authorization,
-        },
-        body: JSON.stringify({ input }),
-      });
-  
-      if (!chatReply.ok) {
-        throw new Error("Error in response: " + chatReply.statusText);
-      }
-  
-      const reader = chatReply.body.getReader();
-      const decoder = new TextDecoder();
-      let done = false;
-      let accumulatedMessage = '';
-  
-      while (!done) {
-        const { value, done: isDone } = await reader.read();
-        if (isDone) {
-          done = true;
-        } else {
-          const chunk = decoder.decode(value, { stream: true });
-          accumulatedMessage += chunk;
-          
-          // Update messages with bot reply
-          setMessages(prevMessages => {
-            const lastIndex = prevMessages.length - 1;
-            const currentMessage = { ...prevMessages[lastIndex], content: accumulatedMessage };
-            return [...prevMessages.slice(0, lastIndex), currentMessage];
-          });
-        }
-      }
-  
-      // Update all messages and chat previews after the complete message is received
-      setAllMessages(prevAllMessages => {
-        const currentMessages = [...prevAllMessages[chatNo].slice(0, -1), { ...emptyMessage, content: accumulatedMessage }];
-        return { ...prevAllMessages, [chatNo]: currentMessages };
-      });
-  
-      setChatPreviews(oldPreviews => oldPreviews.map(preview =>
-        preview.id === emptyMessage.chat_id ? { ...preview, lastMessage: accumulatedMessage } : preview
-      ));
-
-      // update empty message with llm output
-      const finalmessage = await axios.post(
-        `${backend}/message/edit/${emptyMessage.id}`,
-        { content: accumulatedMessage },
-        { headers }
-      );
-      console.log(finalmessage)
-      
-    } catch (error) {
-      console.error("Error sending message to RAG:", error);
-      setErrorMessage("Failed to get a response from the bot. Please try again.");
-    }
-  };
 
   const deleteMessage = async (id) => {
     try {
       await axios.delete(`${backend}/message/${id}`, { headers });
       setMessages(prevMessages => prevMessages.filter((message) => message.id !== id));
     } catch (error) {
-      console.error("Error deleting message:", error);
       setErrorMessage("Failed to delete the message. Please try again.");
     }
   };
@@ -156,7 +97,6 @@ export default function ChatWindow({ messages, chatNo, setChatPreviews, setMessa
 
   const loadMoreMessages = async () => {
     // Prevent loading if currently loading or no more messages left to load
-    console.log('entered load function', loadingMore, noMoreMessagesRef.current, chatNo)
     if (loadingMore || noMoreMessagesRef.current || chatNo === null) return; 
     setLoadingMore(true);
   
@@ -167,8 +107,6 @@ export default function ChatWindow({ messages, chatNo, setChatPreviews, setMessa
         response = await axios.post(`${backend}/message/older/${chatNo}`, 
           { before_timestamp: messages[0].timestamp }, { headers }
         );
-    
-        console.log('Response data:', response.data); // Debugging output
       }
       else{
         setNoMoreMessages(true);
@@ -188,7 +126,6 @@ export default function ChatWindow({ messages, chatNo, setChatPreviews, setMessa
         setNoMoreMessages(true);
       }
     } catch (error) {
-      console.error("Error loading more messages:", error);
       setErrorMessage("Failed to load more messages. Please try again.");
     } finally {
       setLoadingMore(false);
@@ -215,13 +152,11 @@ export default function ChatWindow({ messages, chatNo, setChatPreviews, setMessa
     // Observe the sentinel
     if (sentinelElement) {
       observer.observe(sentinelElement);
-      console.log('observer')
     }
 
     return () => {
       if (sentinelElement) {
         observer.unobserve(sentinelElement);
-        console.log('observer closed')
       }
     };
   }, [loadingMore, chatNo]); // Depend on loadingMore to re-run observer logic
@@ -260,6 +195,7 @@ export default function ChatWindow({ messages, chatNo, setChatPreviews, setMessa
         sentinelRef={sentinelRef} 
         chatNo={chatNo}
         messagesContainerRef={messagesContainerRef}
+        newMessageBoolean={newMessageBoolean}
       />
         
       <div className="flex px-4 h-14 items-center justify-center">

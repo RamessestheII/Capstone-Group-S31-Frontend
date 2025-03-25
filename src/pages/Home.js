@@ -119,7 +119,7 @@ export default function Home() {
     return (
         <div className="h-screen m-0 flex bg-slate-200 dark:bg-black dark:text-white ">
             
-            <button onClick={toggleMenu} className="absolute bg-transparent border-none cursor-pointer mt-3 p-0 z-10">
+            <button onClick={toggleMenu} className="absolute bg-transparent border-none cursor-pointer ml-1 mt-3 p-0 z-10">
             <FontAwesomeIcon icon={faBars} className="w-10 h-10 pl-2 pt-2 block"/>
             </button>
 

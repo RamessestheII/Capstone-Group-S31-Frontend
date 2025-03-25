@@ -8,8 +8,8 @@ import DropDown from './dropDown';
 
 const Navbar = () => {
   const {logout} = useAuth();
-  const [selectedLLM, setSelectedLLM] = useState(null);
-  const llmList = ['OpenAI', 'Cohere']
+  const [selectedLLM, setSelectedLLM] = useState(0);
+  const llmList = ['OpenAI', 'Anthropic', 'Cohere']
 
   // button for user menu
   const UserButton = ({onClick})=>{

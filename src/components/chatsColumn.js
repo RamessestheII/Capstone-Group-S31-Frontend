@@ -9,7 +9,7 @@ import { faPlus, faArrowUpFromBracket, faArrowLeft} from "@fortawesome/free-soli
 export default function ChatsColumn({ chatPreviews, handleChatChange, addChat, onDeleteChat }) {
     // const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [fileShown, setFileShown] = useState(false);
-
+    console.log(chatPreviews)
 
     const handleContextMenuChat = (e, id) => {
         e.preventDefault(); // Prevent the default context menu from appearing
@@ -59,10 +59,10 @@ export default function ChatsColumn({ chatPreviews, handleChatChange, addChat, o
             </div>
             
             <div className=" flex flex-col overflow-hidden h-full">
-                {fileShown ? 
-                    <FileUpload/>
-                : 
-                <div className="h-full w-full mr-1 flex flex-col overflow-hidden hover:overflow-y-auto">
+                
+                <FileUpload fileShown={fileShown}/>
+                
+                <div className={`w-full mr-1 flex flex-col border-b-2 border-gray-300 overflow-hidden hover:overflow-y-auto ${fileShown ? 'hidden' : ''}`}>
                     {chatPreviews.map((chat, index) => (
                         <ChatPreview 
                             title={chat.title}
@@ -74,7 +74,7 @@ export default function ChatsColumn({ chatPreviews, handleChatChange, addChat, o
                         
                     ))}
                 </div>
-                }
+                
             </div>
             
         </div>
