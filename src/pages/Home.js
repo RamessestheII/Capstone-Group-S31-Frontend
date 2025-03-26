@@ -13,6 +13,16 @@ export default function Home() {
     const [chatPreviews, setChatPreviews] = useState([]);
     const [chatNo, setChatNo] = useState(null);
     const [isMenuOpen, setIsMenuOpen] = useState(true);
+
+    // error message to display in chat window page
+    const [errorMessage, setErrorMessage] = useState(null);
+
+    // navbar menu states
+    const [selectedLLM, setSelectedLLM] = useState(0);
+    const [selectedReranker, setSelectedReranker] = useState(0);
+    const [selectedGraph, setSelectedGraph] = useState(1);
+
+    // authentication header hook
     const authHeader = useAuthHeader();
 
     const headers = {
@@ -133,8 +143,12 @@ export default function Home() {
             </div>
             <div className={`flex flex-col w-full h-full overflow-hidden justify-between transition-margin-left ${isMenuOpen ? 'ml-80' : 'ml-0'}`}>
                 <Navbar 
-                    isMenuOpen={isMenuOpen}
-                    toggleMenu={toggleMenu}
+                    selectedLLM={selectedLLM}
+                    setSelectedLLM={setSelectedLLM}
+                    selectedReranker={selectedReranker}
+                    setSelectedReranker={setSelectedReranker}
+                    selectedGraph={selectedGraph}
+                    setSelectedGraph={setSelectedGraph}
                 />
                 {chatNo?
                     (
@@ -144,6 +158,11 @@ export default function Home() {
                             setMessages={setMessages}
                             setAllMessages={setAllMessages}
                             chatNo={chatNo}
+                            errorMessage={errorMessage}
+                            setErrorMessage={setErrorMessage}
+                            selectedLLM={selectedLLM}
+                            selectedReranker={selectedReranker}
+                            selectedGraph={selectedGraph}
                         />
                     ):
                     (< div className="self-center mb-[30%] text-2xl text-gray-400 font-sans font-semibold"> Select Chat or Create New Chat</div>)

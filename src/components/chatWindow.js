@@ -7,9 +7,8 @@ import { ThreeDots } from "react-loader-spinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-regular-svg-icons";
 
-export default function ChatWindow({ messages, chatNo, setChatPreviews, setMessages, setAllMessages }) {
+export default function ChatWindow({ messages, chatNo, setChatPreviews, setMessages, setAllMessages, errorMessage, setErrorMessage, selectedLLM, selectedReranker, selectedGraph }) {
   const [input, setInput] = useState("");
-  const [errorMessage, setErrorMessage] = useState(null);
   const [loadingMore, setLoadingMore] = useState(false);
   const [noMoreMessages, setNoMoreMessages] = useState(false);
   const [newMessageBoolean, setNewMessageBoolean] = useState(false);
@@ -67,7 +66,8 @@ export default function ChatWindow({ messages, chatNo, setChatPreviews, setMessa
   const handleSend = async () => {
     if (input) {
       await addMessage(input, false);
-      await getChatReply(headers, backend, input, chatNo, addMessage, setMessages, setAllMessages, setChatPreviews, setErrorMessage);
+      await getChatReply(headers, backend, input, chatNo, addMessage, setMessages, 
+        setAllMessages, setChatPreviews, setErrorMessage, selectedLLM, selectedReranker, selectedGraph);
     } else {
       setErrorMessage("Message cannot be empty.");
     }

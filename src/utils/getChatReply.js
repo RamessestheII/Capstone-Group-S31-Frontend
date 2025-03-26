@@ -1,7 +1,8 @@
 import axios from "axios";
 import updateMessageContent from "./updateMessageContent";
 
-const getChatReply = async (headers, backend, input, chatNo, addMessage, setMessages, setAllMessages, setChatPreviews, setErrorMessage) => {
+const getChatReply = async (headers, backend, input, chatNo, addMessage, setMessages, 
+  setAllMessages, setChatPreviews, setErrorMessage, selectedLLM, selectedReranker, selectedGraph) => {
     try {
       const emptyMessage = await addMessage("", true);
       
@@ -11,7 +12,7 @@ const getChatReply = async (headers, backend, input, chatNo, addMessage, setMess
             'Content-Type': 'application/json',
             'Authorization': headers.Authorization,
         },
-        body: JSON.stringify({ input }),
+        body: JSON.stringify({ input, 'llm':selectedLLM, 'reranker': selectedReranker, 'graph': selectedGraph }),
       });
   
       if (!chatReply.ok) {
