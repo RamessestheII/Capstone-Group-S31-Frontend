@@ -6,7 +6,7 @@ const getChatReply = async (headers, backend, input, chatNo, addMessage, setMess
     try {
       const emptyMessage = await addMessage("", true);
       
-      const chatReply = await fetch(`${backend}/message/response`, {
+      const chatReply = await fetch(`${backend}/message/response/${emptyMessage.id}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -49,14 +49,6 @@ const getChatReply = async (headers, backend, input, chatNo, addMessage, setMess
       setChatPreviews(oldPreviews => oldPreviews.map(preview =>
         preview.id === emptyMessage.chat_id ? { ...preview, lastMessage: accumulatedMessage } : preview
       ));
-
-      // update empty message with llm output
-      const finalmessage = await axios.put(
-        `${backend}/message/${emptyMessage.id}`,
-        { content: accumulatedMessage },
-        { headers }
-      );
-      console.log(finalmessage)
       
     } catch (error) {
       console.error("Error sending message to RAG:", error);

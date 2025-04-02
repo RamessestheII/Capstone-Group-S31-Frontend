@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-// import STLogo from './../logo.png'
+import React from 'react';
+import GARLogo from '../GAR_logo.png'
 import { useAuth } from '../Auth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faBrain, faRankingStar, faHexagonNodes } from '@fortawesome/free-solid-svg-icons';
@@ -146,8 +146,8 @@ const GraphMenu = ()=>{
   return (
     <nav className="flex h-[10%] bg-white">
       <div className='flex self-start h-full'>
-        {/* <img src={STLogo} alt='steng-logo' className='w-36 ml-16 mt-1'/> */}
-        <p className='my-5 ml-44 mr-7 h-full font-sans font-bold text-20 text-gray-700'>GAR</p>
+        <img src={GARLogo} alt='steng-logo' className='ml-28 mt-1 p-[5px]'/>
+        {/* <p className='my-5 ml-44 mr-7 h-full font-sans font-bold text-20 text-gray-700'>GAR</p> */}
       </div>
 
       <div className='flex h-full ml-72 mr-7'>
