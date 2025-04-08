@@ -71,13 +71,15 @@ export default function FileUpload({fileShown}) {
     const handleContextMenuFile = async(e, selectedFile) => {
         e.preventDefault(); // Prevent the default context menu from appearing
         if (window.confirm('Do you want to delete this file?')) {
-            
-            await axios.delete(
-                `${backend}/upload/${selectedFile.sector}/${selectedFile.file}`,
-                {headers}
-            )
-            // update useState file list
-            setFileList(fileList.filter((file) => file.file !== selectedFile.file));
+            try{
+                await axios.delete(
+                    `${backend}/upload/${selectedFile.sector}/${selectedFile.file}`,
+                    {headers}
+                )
+                // update useState file list
+                setFileList(fileList.filter((file) => file.file !== selectedFile.file));
+            }
+            catch(error){console.error("Error deleting file:", error)}
         }
     }
 
@@ -91,7 +93,6 @@ export default function FileUpload({fileShown}) {
             // user confirmation to create new kb when file/s are added
             if (window.confirm(`Create new knowledge base ${selectedSector} ?`)){
                 setSectors([...sectors, selectedSector]);
-                console.log(selectedSector)
                 // display add files form, hide search box
                 setNext(true)
             }
@@ -120,7 +121,7 @@ export default function FileUpload({fileShown}) {
 
         try {
             setLoading(true);
-            const response = await axios.post(`${backend}/upload/scan`, formData, {headers});
+            const response = await axios.post(`${backend}/upload/`, formData, {headers});
             setLoading(false);
             // Assuming the response contains an array of filenames
             setFileList(prevFiles => [...prevFiles, ...response.data.filenames]);

@@ -78,6 +78,10 @@ export default function ChatWindow({ messages, chatNo, setChatPreviews, setMessa
     try {
       await axios.delete(`${backend}/message/${id}`, { headers });
       setMessages(prevMessages => prevMessages.filter((message) => message.id !== id));
+      setAllMessages(prevAllMessages => {
+        const currentMessages = [...prevAllMessages[chatNo].filter((message) => message.id !== id)];
+        return { ...prevAllMessages, [chatNo]: currentMessages };
+      });
     } catch (error) {
       setErrorMessage("Failed to delete the message. Please try again.");
     }

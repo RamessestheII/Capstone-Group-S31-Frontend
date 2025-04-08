@@ -9,7 +9,6 @@ import { faPlus, faArrowUpFromBracket, faArrowLeft} from "@fortawesome/free-soli
 export default function ChatsColumn({ chatPreviews, handleChatChange, addChat, onDeleteChat }) {
     // const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [fileShown, setFileShown] = useState(false);
-    console.log(chatPreviews)
 
     const handleContextMenuChat = (e, id) => {
         e.preventDefault(); // Prevent the default context menu from appearing
